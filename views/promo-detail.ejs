@@ -1,0 +1,36 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-container">
+    <% if (promo) { %>
+        <h1><i class="fas fa-tag"></i> <%= promo.title %></h1>
+        <div class="card">
+            <p><strong>Description:</strong> <%= promo.description %></p>
+            <% if (promo.code) { %>
+                <p><strong>Promo Code:</strong> <code style="background: #333; padding: 3px 6px; border-radius: 4px;"><%= promo.code %></code></p>
+            <% } %>
+            <% if (promo.discountPercentage) { %>
+                <p><strong>Discount:</strong> <%= promo.discountPercentage %>%</p>
+            <% } %>
+            <p><strong>Valid From:</strong> <%= new Date(promo.startDate).toLocaleDateString('id-ID') %></p>
+            <% if (promo.endDate) { %>
+                <p><strong>Valid Until:</strong> <%= new Date(promo.endDate).toLocaleDateString('id-ID') %></p>
+            <% } %>
+            <p><strong>Status:</strong> <span style="color: <%= promo.isActive && (!promo.endDate || new Date(promo.endDate) >= new Date()) ? 'var(--success-color)' : 'var(--error-color)' %>">
+                <%= promo.isActive && (!promo.endDate || new Date(promo.endDate) >= new Date()) ? 'Active' : 'Expired/Inactive' %>
+            </span></p>
+            <% if (promo.createdBy) { %>
+                <p><small><em>Posted by: <%= promo.createdBy.username %> on <%= new Date(promo.createdAt).toLocaleDateString('id-ID') %></em></small></p>
+            <% } %>
+        </div>
+        <div class="mt-2">
+            <a href="/notifications" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Notifications</a>
+            <a href="/" class="btn" style="margin-left: 10px;"><i class="fas fa-home"></i> Go Home</a>
+        </div>
+    <% } else { %>
+        <h1>Promo Not Found</h1>
+        <p class="alert alert-error">The promo you are looking for could not be found or is no longer available.</p>
+         <a href="/" class="btn"><i class="fas fa-home"></i> Go Home</a>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

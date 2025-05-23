@@ -1,0 +1,65 @@
+<%- include('partials/header', { title: 'Premium Features' }) %>
+
+<div class="page-container">
+    <h1><i class="fas fa-crown" style="color: gold;"></i> Premium Features & Plans</h1>
+
+    <% if (user && user.isPremium) { %>
+        <div class="alert alert-success">
+            <i class="fas fa-star"></i>
+            <div>
+                <strong>Welcome, Premium Member <%= user.username %>!</strong>
+                <p>You have full access to all our exclusive features. Your API Key is ready for high-volume requests.</p>
+                <p>Your premium subscription expires on: <strong><%= user.premiumExpiryDate ? new Date(user.premiumExpiryDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A' %></strong></p>
+                 <% if (user.apiKey) { %>
+                    <p class="mt-1">Your API Key: <code style="background: #000; padding: 5px 10px; border-radius: 5px; color: var(--accent-color); word-break: break-all;"><%= user.apiKey %></code></p>
+                    <a href="/api/premium-data?apikey=<%= user.apiKey %>" target="_blank" class="btn btn-small mt-1"><i class="fas fa-vial"></i> Test Premium API</a>
+                <% } else { %>
+                    <p class="mt-1 alert alert-error" style="background-color: rgba(244,67,54,0.1); color: var(--error-color);"><i class="fas fa-exclamation-circle"></i> API Key not set. Please contact admin.</p>
+                <% } %>
+            </div>
+        </div>
+    <% } else if (user) { %>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <p>You are currently on the Free plan. Upgrade to Premium to unlock a universe of possibilities!</p>
+        </div>
+    <% } else { %>
+         <p class="alert alert-info"><i class="fas fa-info-circle"></i> Please <a href="/login"><strong>login</strong></a> to see premium options and manage your subscription.</p>
+    <% } %>
+
+    <h2 class="mt-2 text-center"><i class="fas fa-gem"></i> Our Premium Packages</h2>
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-top: 2rem;">
+
+        <div class="card text-center" style="flex-basis: 30%; min-width: 280px; border-top: 5px solid var(--secondary-color);">
+            <i class="fas fa-bolt fa-3x" style="color: var(--secondary-color); margin-bottom: 1rem;"></i>
+            <h3><i class="fas fa-calendar-alt"></i> Monthly Plan</h3>
+            <p style="font-size: 2rem; font-weight: bold; color: var(--accent-color);">Rp 50.000 <span style="font-size: 1rem; color: #aaa;">/month</span></p>
+            <ul style="list-style: none; padding: 0; margin: 1.5rem 0; text-align: left;">
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> 10,000 API Calls/day</li>
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> Access to All Premium Endpoints</li>
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> Priority Email Support</li>
+                <li><i class="fas fa-times-circle" style="color: var(--error-color); margin-right: 5px;"></i> Dedicated Account Manager</li>
+            </ul>
+            <button onclick="alert('Monthly plan purchase: Coming Soon!')" class="btn" style="width:100%; background: var(--secondary-color);"><i class="fas fa-shopping-cart"></i> Choose Monthly</button>
+        </div>
+
+        <div class="card text-center" style="flex-basis: 30%; min-width: 280px; border-top: 5px solid var(--primary-color); transform: scale(1.02); box-shadow: 0 10px 40px rgba(106, 17, 203, 0.3);">
+             <span style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: gold; color: #333; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size:0.9rem;">POPULAR</span>
+            <i class="fas fa-rocket fa-3x" style="color: var(--primary-color); margin-bottom: 1rem;"></i>
+            <h3><i class="fas fa-calendar-check"></i> Yearly Plan</h3>
+            <p style="font-size: 2rem; font-weight: bold; color: var(--accent-color);">Rp 500.000 <span style="font-size: 1rem; color: #aaa;">/year</span></p>
+            <ul style="list-style: none; padding: 0; margin: 1.5rem 0; text-align: left;">
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> <strong>Unlimited</strong> API Calls</li>
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> Access to All Premium Endpoints</li>
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> <strong>24/7</strong> Priority Support</li>
+                <li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 5px;"></i> Dedicated Account Manager</li>
+            </ul>
+            <button onclick="alert('Yearly plan purchase: Coming Soon!')" class="btn" style="width:100%;"><i class="fas fa-shopping-cart"></i> Choose Yearly (Best Value)</button>
+        </div>
+    </div>
+    <% if (user && !user.isPremium) { %>
+        <p class="text-center mt-2 alert alert-info"><i class="fas fa-headset"></i> Contact admin to upgrade your account or if you have custom needs!</p>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

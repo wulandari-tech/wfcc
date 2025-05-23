@@ -1,0 +1,37 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-container">
+    <h1><i class="fas fa-bell"></i> My Notifications</h1>
+
+    <% if (notifications && notifications.length > 0) { %>
+        <ul style="list-style: none; padding: 0;">
+            <% notifications.forEach(notif => { %>
+                <li class="card <%= !notif.isRead ? 'notification-unread' : '' %>" style="margin-bottom: 1rem; border-left: 5px solid <%= !notif.isRead ? 'var(--accent-color)' : 'var(--border-color)' %>;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex-grow: 1;">
+                            <h4 style="margin-bottom: 0.25rem;"><%= notif.title %></h4>
+                            <p style="font-size: 0.95rem; color: #ccc; margin-bottom: 0.5rem;"><%= notif.message %></p>
+                            <% if (notif.link) { %>
+                                <a href="<%= notif.link %>" class="btn btn-small btn-secondary"><i class="fas fa-external-link-alt"></i> View Details</a>
+                            <% } %>
+                        </div>
+                        <small style="color: #aaa; white-space: nowrap; margin-top: 5px;"><%= new Date(notif.createdAt).toLocaleString('id-ID') %></small>
+                    </div>
+                    <% if (!notif.isRead) { %>
+                        <form action="/notifications/<%= notif._id %>/mark-read?redirect=<%= encodeURIComponent(req.originalUrl) %>" method="POST" style="margin-top: 10px;">
+                            <button type="submit" class="btn btn-small" style="background: #555;"><i class="fas fa-check"></i> Mark as Read</button>
+                        </form>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p class="alert alert-info"><i class="fas fa-info-circle"></i> You have no new notifications.</p>
+    <% } %>
+</div>
+<style>
+    .notification-unread {
+        background-color: #2a2a4a;
+    }
+</style>
+<%- include('partials/footer') %>

@@ -1,0 +1,161 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-container">
+    <h1><i class="fas fa-terminal"></i> API Endpoints Documentation</h1>
+    <p>Explore and test our available API endpoints. Remember to include your API key!</p>
+
+    <div class="card endpoint-card">
+        <div class="card-header">
+            <span class="badge GET">GET</span> /api/ai/gemini
+        </div>
+        <p>Interacts with our Gemini AI model to get responses based on your prompt.</p>
+        <strong>Parameters:</strong>
+        <ul>
+            <li><code>prompt</code> (string, required): The text prompt for the AI.</li>
+            <li><code>apikey</code> (string, required, in query or x-api-key header): Your API key.</li>
+        </ul>
+        <button class="btn btn-secondary btn-small toggle-try-it">Try it out <i class="fas fa-caret-down"></i></button>
+        <div class="try-it-form" style="display: none; margin-top: 15px; padding:15px; background-color: #2c2c4a; border-radius: 8px;">
+            <div class="form-group">
+                <label for="gemini-prompt">Prompt:</label>
+                <input type="text" id="gemini-prompt" class="api-param" name="prompt" placeholder="e.g., What is the capital of Indonesia?" value="What is the capital of Indonesia?">
+            </div>
+            <div class="form-group">
+                <label for="gemini-apikey">API Key:</label>
+                <input type="text" id="gemini-apikey" class="api-param" name="apikey" placeholder="Your API Key" value="<%= locals.user && locals.user.apiKey ? locals.user.apiKey : '' %>">
+            </div>
+            <button class="btn execute-api" data-method="GET" data-endpoint="/api/ai/gemini"><i class="fas fa-play"></i> Execute</button>
+            <div class="api-response" style="margin-top:15px;">
+                <pre><code>Click Execute to see the response.</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="card endpoint-card">
+        <div class="card-header">
+           <span class="badge GET">GET</span> /api/promos
+        </div>
+        <p>Retrieves a list of all active promotional offers.</p>
+        <strong>Parameters:</strong> None
+         <button class="btn btn-secondary btn-small toggle-try-it">Try it out <i class="fas fa-caret-down"></i></button>
+        <div class="try-it-form" style="display: none; margin-top: 15px; padding:15px; background-color: #2c2c4a; border-radius: 8px;">
+             <button class="btn execute-api" data-method="GET" data-endpoint="/api/promos"><i class="fas fa-play"></i> Execute</button>
+            <div class="api-response" style="margin-top:15px;">
+                <pre><code>Click Execute to see the response.</code></pre>
+            </div>
+        </div>
+    </div>
+
+     <div class="card endpoint-card">
+        <div class="card-header">
+           <span class="badge GET">GET</span> /api/check-premium-status
+        </div>
+        <p>Checks the premium status and API usage for a given API key.</p>
+        <strong>Parameters:</strong>
+        <ul>
+             <li><code>apikey</code> (string, required, in query or x-api-key header): Your API key.</li>
+        </ul>
+         <button class="btn btn-secondary btn-small toggle-try-it">Try it out <i class="fas fa-caret-down"></i></button>
+        <div class="try-it-form" style="display: none; margin-top: 15px; padding:15px; background-color: #2c2c4a; border-radius: 8px;">
+            <div class="form-group">
+                <label for="status-apikey">API Key:</label>
+                <input type="text" id="status-apikey" class="api-param" name="apikey" placeholder="Your API Key" value="<%= locals.user && locals.user.apiKey ? locals.user.apiKey : '' %>">
+            </div>
+             <button class="btn execute-api" data-method="GET" data-endpoint="/api/check-premium-status"><i class="fas fa-play"></i> Execute</button>
+            <div class="api-response" style="margin-top:15px;">
+                <pre><code>Click Execute to see the response.</code></pre>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .endpoint-card { margin-bottom: 20px; }
+    .badge {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-right: 10px;
+        font-size: 0.9em;
+        text-transform: uppercase;
+    }
+    .badge.GET { background-color: var(--secondary-color); color: white; }
+    .badge.POST { background-color: var(--success-color); color: white; }
+    .api-response pre {
+        background-color: #111;
+        color: #f0f0f0;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        max-height: 400px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.toggle-try-it').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                icon.classList.remove('fa-caret-down');
+                icon.classList.add('fa-caret-up');
+            } else {
+                form.style.display = 'none';
+                icon.classList.remove('fa-caret-up');
+                icon.classList.add('fa-caret-down');
+            }
+        });
+    });
+
+    document.querySelectorAll('.execute-api').forEach(button => {
+        button.addEventListener('click', async function() {
+            const method = this.dataset.method;
+            let endpoint = this.dataset.endpoint;
+            const parentForm = this.closest('.try-it-form');
+            const responseDiv = parentForm.querySelector('.api-response pre code');
+            responseDiv.textContent = 'Executing...';
+
+            const params = {};
+            parentForm.querySelectorAll('.api-param').forEach(input => {
+                if (input.value.trim() !== '') {
+                    params[input.name] = input.value.trim();
+                }
+            });
+
+            const queryParams = new URLSearchParams(params).toString();
+            if (method === 'GET' && queryParams) {
+                endpoint += '?' + queryParams;
+            }
+
+            try {
+                const fetchOptions = { method: method };
+                if (method !== 'GET' && Object.keys(params).length > 0) {
+                    fetchOptions.headers = { 'Content-Type': 'application/json' };
+                    fetchOptions.body = JSON.stringify(params);
+                } else if (method !== 'GET') {
+                     fetchOptions.headers = { 'Content-Type': 'application/json' };
+                     fetchOptions.body = JSON.stringify({});
+                }
+
+                const response = await fetch(endpoint, fetchOptions);
+                const responseText = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch(e) {
+                    console.error("Response is not valid JSON:", responseText);
+                    data = { success: false, error: "Received non-JSON response from server.", status: response.status, rawResponse: responseText.substring(0, 500) + "..." };
+                }
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('API execution error on client-side:', error);
+                responseDiv.textContent = 'Error: ' + error.message + (error.cause ? `\nCause: ${error.cause}` : '');
+            }
+        });
+    });
+</script>
+<%- include('partials/footer') %>

@@ -1,0 +1,40 @@
+<nav class="main-nav" id="mainNav">
+    <div class="nav-container">
+        <div class="nav-logo">
+            <a href="/"><i class="fas fa-rocket"></i>wfc apis</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/endpoints"><i class="fas fa-plug"></i> Endpoints</a></li>
+            <li><a href="/code"><i class="fas fa-code"></i> Code Examples</a></li>
+            <% if (user) { %>
+                <% if (user.role === 'admin') { %>
+                    <li><a href="/admin/dashboard"><i class="fas fa-user-shield"></i> Admin</a></li>
+                <% } %>
+                <li><a href="/premium"><i class="fas fa-star"></i> Premium</a></li>
+                <li><a href="/auth/profile"><i class="fas fa-id-badge"></i> Profile</a></li>
+                <li>
+                    <a href="/auth/notifications" style="position: relative;">
+                        <i class="fas fa-bell"></i>
+                        <% if (locals.unreadNotificationsCount && locals.unreadNotificationsCount > 0) { %>
+                            <span style="position: absolute; top: 0px; right: 0px; background-color: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7em; line-height:1;">
+                                <%= locals.unreadNotificationsCount %>
+                            </span>
+                        <% } %>
+                        <span style="margin-left: 5px; display: inline-block;">Notifications</span>
+                    </a>
+                </li>
+                <li>
+                    <span class="user-greeting <%= user.isPremium ? 'premium' : '' %>">
+                        <i class="fas fa-user-circle"></i> <%= user.username %>
+                    </span>
+                </li>
+                <li><a href="/auth/logout" class="btn btn-danger btn-small"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <% } else { %>
+                <li><a href="/auth/login" class="btn btn-secondary btn-small"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="/auth/register" class="btn btn-small"><i class="fas fa-user-plus"></i> Register</a></li>
+            <% } %>
+            <li><a href="/api/promos" target="_blank" class="btn btn-small" style="background-color: #4a4a6a;"><i class="fas fa-tags"></i> View Promos (API)</a></li>
+        </ul>
+    </div>
+</nav>

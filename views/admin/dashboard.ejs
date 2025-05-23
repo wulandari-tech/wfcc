@@ -1,0 +1,68 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="page-container">
+    <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+    <p>Welcome, Admin <strong><%= user.username %></strong>! Manage your application from here.</p>
+
+    <% if (success_msg && success_msg.length > 0) { %><div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success_msg[0] %></div><% } %>
+    <% if (error_msg && error_msg.length > 0) { %><div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> <%= error_msg[0] %></div><% } %>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;" class="mt-2">
+        <div class="card text-center">
+            <i class="fas fa-users fa-3x" style="color: var(--accent-color); margin-bottom: 1rem;"></i>
+            <h3><%= totalUsers %></h3>
+            <p>Total Users</p>
+        </div>
+        <div class="card text-center">
+            <i class="fas fa-star fa-3x" style="color: gold; margin-bottom: 1rem;"></i>
+            <h3><%= premiumUsers %></h3>
+            <p>Premium Users</p>
+        </div>
+        <div class="card text-center">
+            <i class="fas fa-tags fa-3x" style="color: var(--success-color); margin-bottom: 1rem;"></i>
+            <h3><%= activePromos %></h3>
+            <p>Active Promos</p>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;" class="mt-2">
+        <div class="card">
+            <div class="card-header d-flex justify-between align-center">
+                <span><i class="fas fa-user-clock"></i> Recent Users</span>
+                <a href="/admin/users" class="btn btn-small btn-secondary"><i class="fas fa-eye"></i> View All Users</a>
+            </div>
+            <% if(users && users.length > 0) { %>
+                <ul style="list-style: none; padding: 0;">
+                    <% users.forEach(u => { %>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);"><i class="fas fa-user-circle" style="margin-right: 5px; color: <%= u.role === 'admin' ? 'var(--accent-color)' : 'var(--text-color)' %>;"></i> <%= u.username %> (<%= u.email %>)</li>
+                    <% }) %>
+                     <% if (users.length > 0) { %><li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display:none;"></li> <% } %>
+                </ul>
+            <% } else { %>
+                <p class="alert alert-info"><i class="fas fa-info-circle"></i> No recent users.</p>
+            <% } %>
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex justify-between align-center">
+                <span><i class="fas fa-bullhorn"></i> Recent Promos</span>
+                 <a href="/admin/promos" class="btn btn-small"><i class="fas fa-eye"></i> View All Promos</a>
+            </div>
+            <% if(promos && promos.length > 0) { %>
+                <ul style="list-style: none; padding: 0;">
+                    <% promos.forEach(p => { %>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color);"><i class="fas fa-tag" style="margin-right: 5px; color: var(--accent-color);"></i> <%= p.title %></li>
+                    <% }) %>
+                     <% if (promos.length > 0) { %><li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display:none;"></li> <% } %>
+                </ul>
+            <% } else { %>
+                <p class="alert alert-info"><i class="fas fa-info-circle"></i> No recent promos.</p>
+            <% } %>
+        </div>
+    </div>
+     <div class="mt-2">
+        <a href="/admin/settings" class="btn"><i class="fas fa-cogs"></i> Global Settings</a>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

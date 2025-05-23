@@ -1,0 +1,70 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="page-container" style="max-width: 700px;">
+    <h1><i class="fas fa-user-circle"></i> My Profile</h1>
+
+    <% if (user) { %>
+        <div class="card">
+            <div class="card-header"><i class="fas fa-id-card"></i> Account Details</div>
+            <table class="profile-table" style="border-collapse: collapse; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; width: 30%; padding: 10px; border-bottom: 1px solid var(--border-color);"><i class="fas fa-user" style="margin-right: 8px; color: var(--accent-color);"></i> Username</td>
+                        <td style="padding: 10px; border-bottom: 1px solid var(--border-color);"><%= user.username %></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 10px; border-bottom: 1px solid var(--border-color);"><i class="fas fa-envelope" style="margin-right: 8px; color: var(--accent-color);"></i> Email</td>
+                        <td style="padding: 10px; border-bottom: 1px solid var(--border-color);"><%= user.email %></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 10px; border-bottom: 1px solid var(--border-color);"><i class="fas fa-user-tag" style="margin-right: 8px; color: var(--accent-color);"></i> Role</td>
+                        <td style="padding: 10px; border-bottom: 1px solid var(--border-color);"><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 10px; border-bottom: 1px solid var(--border-color);"><i class="fas fa-star" style="margin-right: 8px; color: <%= user.isPremium ? 'gold' : 'var(--accent-color)' %>;"></i> Premium Status</td>
+                        <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">
+                            <% if (user.isPremium) { %>
+                                <span style="color: gold; font-weight: bold;">Premium Member</span>
+                                <% if (user.premiumExpiryDate) { %>
+                                    (Expires: <%= new Date(user.premiumExpiryDate).toLocaleDateString('id-ID') %>)
+                                <% } %>
+                            <% } else { %>
+                                Free User - <a href="/premium">Upgrade to Premium!</a>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 10px; border-bottom: 1px solid var(--border-color);"><i class="fas fa-key" style="margin-right: 8px; color: var(--accent-color);"></i> API Key</td>
+                        <td style="padding: 10px; border-bottom: 1px solid var(--border-color); word-break: break-all;">
+                            <% if (user.apiKey) { %>
+                                <code><%= user.apiKey %></code>
+                            <% } else { %>
+                                <span style="color: #aaa;">Not set. Admin can set this for you.</span>
+                            <% } %>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td style="font-weight: bold; padding: 10px; border-bottom: 1px solid var(--border-color);"><i class="fas fa-tachometer-alt" style="margin-right: 8px; color: var(--accent-color);"></i> API Calls Today</td>
+                        <td style="padding: 10px; border-bottom: 1px solid var(--border-color);"><%= user.apiCallCount %> / <%= user.apiCallLimit %></td>
+                    </tr>
+                     <tr>
+                        <td style="font-weight: bold; padding: 10px;"><i class="fas fa-calendar-plus" style="margin-right: 8px; color: var(--accent-color);"></i> Joined On</td>
+                        <td style="padding: 10px;"><%= new Date(user.createdAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-2 text-center">
+            <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
+
+    <% } else { %>
+        <p class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Could not load profile information. Please try logging in again.</p>
+    <% } %>
+</div>
+<style>
+    .profile-table td { background-color: transparent !important; }
+</style>
+
+<%- include('partials/footer') %>

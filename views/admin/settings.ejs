@@ -1,0 +1,41 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="page-container" style="max-width: 700px;">
+    <h1><i class="fas fa-cogs"></i> Global Application Settings</h1>
+
+    <% if (typeof success_msg !== 'undefined' && success_msg) { %>
+        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success_msg %></div>
+    <% } %>
+    <% if (typeof error_msg !== 'undefined' && error_msg) { %>
+        <div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> <%= error_msg %></div>
+    <% } %>
+
+    <form action="/admin/settings/update" method="POST">
+        <% settings.forEach(setting => { %>
+            <% if (setting.key === 'defaultUserApiLimit') { %>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header"><%= setting.description || setting.key %></div>
+                    <div class="form-group">
+                        <label for="<%= setting.key %>">Value:</label>
+                        <input type="number" id="<%= setting.key %>" name="<%= setting.key %>" value="<%= setting.value %>" class="form-control" min="0" required>
+                    </div>
+                </div>
+            <% } %>
+            <%# Tambahkan blok if lain untuk setting kunci lainnya jika ada %>
+            <%# Contoh: %>
+            <%# if (setting.key === 'siteMaintenanceMode') { %>
+            <%#    <div class="card" style="margin-bottom: 20px;"> %>
+            <%#        <div class="card-header"><%#= setting.description || setting.key %></div> %>
+            <%#        <div class="form-group" style="display: flex; align-items: center;"> %>
+            <%#            <input type="checkbox" id="<%#= setting.key %>" name="<%#= setting.key %>" <%#= setting.value ? 'checked' : '' %>> %>
+            <%#            <label for="<%#= setting.key %>" style="margin-bottom: 0;">Enable Maintenance Mode</label> %>
+            <%#        </div> %>
+            <%#    </div> %>
+            <%# } %>
+        <% }) %>
+
+        <button type="submit" class="btn" style="width: 100%;"><i class="fas fa-save"></i> Save Settings</button>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

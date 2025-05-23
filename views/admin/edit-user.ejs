@@ -1,0 +1,58 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="page-container" style="max-width: 700px;">
+    <h1><i class="fas fa-user-edit"></i> <%= title %></h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> <%= error %></div>
+    <% } %>
+
+    <form action="/admin/users/<%= userToEdit._id %>/edit" method="POST">
+        <div class="form-group">
+            <label for="username"><i class="fas fa-user"></i> Username</label>
+            <input type="text" id="username" name="username" value="<%= userToEdit.username %>" required>
+        </div>
+        <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Email</label>
+            <input type="email" id="email" name="email" value="<%= userToEdit.email %>" required>
+        </div>
+        <div class="form-group">
+            <label for="role"><i class="fas fa-user-tag"></i> Role</label>
+            <select id="role" name="role" <%= userToEdit._id.equals(user._id) ? 'disabled' : '' %>>
+                <option value="user" <%= userToEdit.role === 'user' ? 'selected' : '' %>>User</option>
+                <option value="admin" <%= userToEdit.role === 'admin' ? 'selected' : '' %>>Admin</option>
+            </select>
+            <% if (userToEdit._id.equals(user._id)) { %>
+                <small class="form-text text-muted">Anda tidak bisa mengubah role diri sendiri dari form ini.</small>
+            <% } %>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center;">
+            <input type="checkbox" id="isPremium" name="isPremium" <%= userToEdit.isPremium ? 'checked' : '' %>>
+            <label for="isPremium" style="margin-bottom: 0;"><i class="fas fa-star"></i> Is Premium?</label>
+        </div>
+        <div class="form-group">
+            <label for="premiumExpiryDate"><i class="fas fa-calendar-times"></i> Premium Expiry Date (kosongkan jika tidak ada)</label>
+            <input type="date" id="premiumExpiryDate" name="premiumExpiryDate" value="<%= userToEdit.premiumExpiryDate ? new Date(userToEdit.premiumExpiryDate).toISOString().split('T')[0] : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="apiKey"><i class="fas fa-key"></i> API Key (kosongkan untuk tidak mengubah)</label>
+            <input type="text" id="apiKey" name="apiKey" value="<%= userToEdit.apiKey || '' %>" placeholder="Biarkan kosong untuk tidak mengubah">
+             <% if (!userToEdit.apiKey) { %>
+                <div style="display: flex; align-items: center; margin-top: 5px;">
+                    <input type="checkbox" id="generateApiKey" name="generateApiKey" style="width:auto; margin-right:5px;">
+                    <label for="generateApiKey" style="margin-bottom:0; font-weight:normal;">Generate New API Key</label>
+                </div>
+            <% } %>
+        </div>
+         <div class="form-group">
+            <label for="apiCallLimit"><i class="fas fa-tachometer-alt"></i> API Call Limit (per day)</label>
+            <input type="number" id="apiCallLimit" name="apiCallLimit" value="<%= userToEdit.apiCallLimit %>" min="0" required>
+        </div>
+        <div class="d-flex justify-between">
+            <button type="submit" class="btn"><i class="fas fa-save"></i> Save Changes</button>
+            <a href="/admin/users" class="btn btn-secondary"><i class="fas fa-times-circle"></i> Cancel</a>
+        </div>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

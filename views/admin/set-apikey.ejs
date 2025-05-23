@@ -1,0 +1,19 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="page-container" style="max-width: 600px;">
+    <h1><i class="fas fa-key"></i> Set API Key for <%= userToUpdate.username %></h1>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> <%= error %></div>
+    <% } %>
+    <form action="/admin/users/<%= userToUpdate._id %>/set-apikey" method="POST">
+        <div class="form-group">
+            <label for="apiKey"><i class="fas fa-fingerprint"></i> API Key</label>
+            <input type="text" id="apiKey" name="apiKey" value="<%= userToUpdate.apiKey || '' %>" placeholder="Leave blank to auto-generate">
+            <small style="display: block; margin-top: 5px; color: #aaa;">If left blank, a new unique API key will be generated automatically.</small>
+        </div>
+        <button type="submit" class="btn" style="width:100%"><i class="fas fa-check-double"></i> Set/Update API Key</button>
+    </form>
+    <p class="text-center mt-2"><a href="/admin/users" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Users</a></p>
+</div>
+
+<%- include('../partials/footer') %>

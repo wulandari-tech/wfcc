@@ -1,0 +1,15 @@
+<%- include('partials/header', { title: title || 'Error Occurred' }) %>
+
+<div class="page-container text-center">
+    <i class="fas fa-exclamation-triangle fa-5x" style="color: var(--error-color); margin-bottom: 2rem;"></i>
+    <h1><%= status || 500 %> - <%= message || 'An unexpected error occurred' %></h1>
+    <p style="font-size: 1.2rem; color: #bbb; margin-bottom: 2rem;">
+        Oops! Something went wrong on our end. We're working to fix it.
+    </p>
+    <a href="/" class="btn"><i class="fas fa-home"></i> Go to Homepage</a>
+    <% if (status === 404) { %>
+        <p class="mt-2" style="color: #aaa;">The page you were looking for could not be found.</p>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

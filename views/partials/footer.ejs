@@ -1,0 +1,27 @@
+    </main>
+    <footer>
+        <p>© <%= new Date().getFullYear() %> wfc apis. All rights reserved. Crafted with <i class="fas fa-heart" style="color: #e25555;"></i>.</p>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) {
+                nav.classList.add('main-nav-scrolled');
+            } else {
+                nav.classList.remove('main-nav-scrolled');
+            }
+        });
+
+        const notificationButtons = document.querySelectorAll('.sendNotificationBtnSimulate');
+        if (notificationButtons) {
+            notificationButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const promoTitle = this.dataset.promoTitle || 'Promo Spesial';
+                    alert(`Simulasi: Notifikasi untuk "${promoTitle}" terkirim!`);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<%- include('../partials/header', { title: title }) %>
+<div class="page-container" style="max-width: 700px;">
+    <h1><i class="fas fa-plus-circle"></i> Add New Promo</h1>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> <%= error %></div>
+    <% } %>
+    <form action="/admin/promos/add" method="POST">
+        <div class="form-group">
+            <label for="title"><i class="fas fa-heading"></i> Title</label>
+            <input type="text" id="title" name="title" value="<%= typeof formData !== 'undefined' ? formData.title : '' %>" required>
+        </div>
+        <div class="form-group">
+            <label for="description"><i class="fas fa-align-left"></i> Description</label>
+            <textarea id="description" name="description" required><%= typeof formData !== 'undefined' ? formData.description : '' %></textarea>
+        </div>
+        <div class="form-group">
+            <label for="code"><i class="fas fa-barcode"></i> Promo Code (optional)</label>
+            <input type="text" id="code" name="code" value="<%= typeof formData !== 'undefined' ? formData.code : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="discountPercentage"><i class="fas fa-percent"></i> Discount % (optional)</label>
+            <input type="number" id="discountPercentage" name="discountPercentage" min="0" max="100" value="<%= typeof formData !== 'undefined' ? formData.discountPercentage : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="endDate"><i class="fas fa-calendar-alt"></i> End Date (optional)</label>
+            <input type="date" id="endDate" name="endDate" value="<%= typeof formData !== 'undefined' ? formData.endDate : '' %>">
+        </div>
+        <div class="form-group">
+            <label for="targetAudience"><i class="fas fa-users"></i> Target Audience for Notification</label>
+            <select name="targetAudience" id="targetAudience" class="form-control" style="padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; background-color: #2c2c4a; color: var(--text-color); font-size: 1rem; width:100%;">
+                <option value="all" <%= (typeof formData !== 'undefined' && formData.targetAudience === 'all') ? 'selected' : '' %>>All Users</option>
+                <option value="premium" <%= (typeof formData !== 'undefined' && formData.targetAudience === 'premium') ? 'selected' : '' %>>Premium Users Only</option>
+                <option value="free" <%= (typeof formData !== 'undefined' && formData.targetAudience === 'free') ? 'selected' : '' %>>Free Users Only</option>
+            </select>
+        </div>
+         <div class="form-group" style="display: flex; align-items: center;">
+            <input type="checkbox" id="isActive" name="isActive" <%= (typeof formData === 'undefined' || formData.isActive === 'on' || formData.isActive === true) ? 'checked' : '' %> style="width: auto; margin-right: 10px;">
+            <label for="isActive" style="margin-bottom: 0;">Is Active?</label>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center;">
+            <input type="checkbox" id="sendNotification" name="sendNotification" <%= (typeof formData !== 'undefined' && formData.sendNotification === 'on') ? 'checked' : '' %> style="width: auto; margin-right: 10px;">
+            <label for="sendNotification" style="margin-bottom: 0;">Send Notification to Target Audience?</label>
+        </div>
+        <button type="submit" class="btn" style="width:100%"><i class="fas fa-save"></i> Add Promo</button>
+    </form>
+</div>
+<%- include('../partials/footer') %>
