@@ -5,7 +5,7 @@
      <% if (typeof error !== 'undefined' && error) { %>
         <div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> <%= error %></div>
     <% } %>
-    <form action="/register" method="POST">
+    <form action="/auth/register" method="POST">
         <div class="form-group">
             <label for="username"><i class="fas fa-user"></i> Username</label>
             <input type="text" id="username" name="username" required placeholder="Choose a cool username">
